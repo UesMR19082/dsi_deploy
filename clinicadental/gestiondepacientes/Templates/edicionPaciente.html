@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar Paciente{% endblock %}
+
+{% block content %}
+<div class="form-page d-flex justify-content-center align-items-start mt-4 ">
+    <div class="form-wrapper bg-white shadow p-4">
+        <h1 class="text-center mb-4">Editar Paciente</h1>
+        
+        {% if messages %}
+        <div class="alert alert-success" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form action="{% url 'editarpaciente' %}" method="POST">
+            {% csrf_token %}
+            
+            <input type="hidden" name="id" value="{{ paciente.id }}">
+
+            <div class="row g-3">
+                
+                <div class="col-12 col-md-6">
+                    <label for="nombre" class="form-label">
+                        Nombre: <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="nombre" name="nombre" value="{{ paciente.nombre|default:'' }}"
+                           class="form-control" required maxlength="100" pattern="[A-Za-záéíóúñÁÉÍÓÚÑ\s]+"
+                           oninvalid="this.setCustomValidity('Por favor, utilice solo letras')"
+                           oninput="this.setCustomValidity('')">
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="apellido" class="form-label">
+                        Apellido: <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="apellido" name="apellido" value="{{ paciente.apellido|default:'' }}"
+                           class="form-control" required maxlength="100" pattern="[A-Za-záéíóúñÁÉÍÓÚÑ\s]+"
+                           oninvalid="this.setCustomValidity('Por favor, utilice solo letras')"
+                           oninput="this.setCustomValidity('')">
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="dui" class="form-label">
+                        DUI:
+                    </label>
+                    <input type="text" id="dui" name="dui" value="{{ paciente.dui|default:'' }}"
+                           class="form-control" pattern="^\d{8}-\d{1}$"
+                           title="Formato: 12345678-9"
+                           oninvalid="this.setCustomValidity('Por favor, use el formato: 06040342-0')"
+                           oninput="this.setCustomValidity('')">
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="fecha_ingreso" class="form-label">Fecha de ingreso:</label>
+                    <input type="date" id="fecha_ingreso" name="fecha_ingreso" class="form-control"
+                           value="{% if paciente.fecha_ingreso %}{{ paciente.fecha_ingreso|date:'Y-m-d' }}{% endif %}"
+                           max="{{ today|date:'Y-m-d' }}">
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="correo" class="form-label">Correo:</label>
+                    <input type="email" id="correo" name="correo" value="{{ paciente.correo|default:'' }}"
+                           class="form-control" maxlength="254"
+                           pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                           title="Por favor ingrese un email válido"
+                           oninvalid="this.setCustomValidity('Por favor ingrese un email válido')"
+                           oninput="this.setCustomValidity('')">
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="direccion" class="form-label">Dirección:</label>
+                    <input type="text" id="direccion" name="direccion" value="{{ paciente.direccion|default:'' }}"
+                           class="form-control" maxlength="200">
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="telefono" class="form-label">Teléfono:</label>
+                    <input type="tel" id="telefono" name="telefono" value="{{ paciente.telefono|default:'' }}"
+                           class="form-control" pattern="^\+?\d[\d\- ]{7,14}$"
+                           oninvalid="this.setCustomValidity('Por favor ingrese un numero de telefono válido')"
+                           oninput="this.setCustomValidity('')">
+                </div>
+
+            </div>
+
+            <div class="mt-4 text-end">
+                <button type="submit" class="btn btn-primario px-4">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script defer src="https://unpkg.com/imask"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Apunta al ID 'dui' (en lugar de 'id_dui') porque el campo es manual
+        const input = document.getElementById('dui'); 
+        if (input) {
+            IMask(input, { mask: '00000000-0' });
+        }
+    });
+</script>
+{% endblock %}

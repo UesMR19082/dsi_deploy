@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Gestión de Especialistas
+{% endblock %}
+
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+          <h1 class="h4 mb-0 fw-semibold" id="titulo-agenda">Gestión de Especialistas</h1>
+        <div class="d-flex align-items-center">
+            <a href="{% url 'crearespecialista' %}" class="btn btn-primario">Registrar Especialistas</a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            
+        <table id="especialistaTable" class="table table-hover align-middle" style="width:100%">
+            <thead>
+                <tr>
+                    <th>DUI</th>
+                    <th>Nombre</th>
+                    <th>Especialidad</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+                </thead>
+            <tbody>
+                {% for especialista in especialistas %}
+                <tr>
+                    <td>{{ especialista.dui|default:"" }}</td>
+                    <td>{{ especialista.nombre }} {{especialista.apellido}}</td>
+                    <td>{{ especialista.especialidad }}</td>
+                    <td>{{ especialista.correo|default:"" }}</td>
+                    <td>{{ especialista.telefono|default:"" }}</td>
+
+                    <td class="text-center">
+                        
+                        <a href="{% url 'edicionespecialista' especialista.id %}" class="btn btn-sm btn-modificar">Modificar</a>
+                        
+                        <form method="post" action="{% url 'eliminarespecialista' especialista.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-borrar" onclick="return confirm('¿Estás seguro de que deseas eliminar a este especialista?');">Borrar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#especialistaTable').DataTable({
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
+                },
+                responsive: true,
+                order: [[2, 'desc']]
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar Especialista{% endblock %}
+
+{% block content %}
+<div class="form-page d-flex justify-content-center align-items-start mt-4 ">
+    <div class="form-wrapper bg-white shadow p-4">
+        <h1 class="text-center mb-4">Editar Especialista</h1>
+        
+        {% if messages %}
+        <div class="alert alert-success" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form action="{% url 'editarespecialista' %}" method="POST">
+            {% csrf_token %}
+            
+            <input type="hidden" name="id" value="{{ especialista.id }}">
+
+            <div class="row g-3">
+                
+                <div class="col-12 col-md-6">
+                    <label for="nombre" class="form-label">
+                        Nombre: <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="nombre" name="nombre" value="{{ especialista.nombre|default:'' }}"
+                           class="form-control" required maxlength="100" pattern="[A-Za-záéíóúñÁÉÍÓÚÑ\s]+"
+                           oninvalid="this.setCustomValidity('Por favor, utilice solo letras')"
+                           oninput="this.setCustomValidity('')">
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="apellido" class="form-label">
+                        Apellido: <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="apellido" name="apellido" value="{{ especialista.apellido|default:'' }}"
+                           class="form-control" required maxlength="100" pattern="[A-Za-záéíóúñÁÉÍÓÚÑ\s]+"
+                           oninvalid="this.setCustomValidity('Por favor, utilice solo letras')"
+                           oninput="this.setCustomValidity('')">
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="especialidad" class="form-label">
+                        Especialidad: <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="especialidad" name="especialidad" value="{{ especialista.especialidad|default:'' }}"
+                           class="form-control" required maxlength="100" pattern="[A-Za-záéíóúñÁÉÍÓÚÑ\s]+"
+                           oninvalid="this.setCustomValidity('Por favor, utilice solo letras')"
+                           oninput="this.setCustomValidity('')">
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="telefono" class="form-label">Teléfono:</label>
+                    <input type="tel" id="telefono" name="telefono" value="{{ especialista.telefono|default:'' }}"
+                           class="form-control" pattern="^\+?\d[\d\- ]{7,14}$"
+                           oninvalid="this.setCustomValidity('Por favor ingrese un numero de telefono válido')"
+                           oninput="this.setCustomValidity('')">
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="correo" class="form-label">Correo:</label>
+                    <input type="email" id="correo" name="correo" value="{{ especialista.correo|default:'' }}"
+                           class="form-control" maxlength="254"
+                           pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                           title="Por favor ingrese un email válido"
+                           oninvalid="this.setCustomValidity('Por favor ingrese un email válido')"
+                           oninput="this.setCustomValidity('')">
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="dui" class="form-label">
+                        DUI: <span class="text-danger">*</span>
+                    </label>
+                    <input type="text" id="dui" name="dui" value="{{ especialista.dui|default:'' }}"
+                           class="form-control" required pattern="^\d{8}-\d{1}$"
+                           title="Formato: 12345678-9"
+                           readonly
+                           oninvalid="this.setCustomValidity('Por favor, use el formato: 06040342-0')"
+                           oninput="this.setCustomValidity('')"
+                           style="background-color: #e9ecef; color: #6c757d;">
+                </div>
+
+            </div>
+
+            <div class="mt-4 text-end">
+                <button type="submit" class="btn btn-primario px-4">Guardar cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script defer src="https://unpkg.com/imask"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Apunta al ID 'dui' (en lugar de 'id_dui') porque el campo es manual
+        const input = document.getElementById('dui'); 
+        if (input) {
+            IMask(input, { mask: '00000000-0' });
+        }
+    });
+</script>
+{% endblock %}
