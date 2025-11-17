@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-z9ka68*=kcg(ff=o*si_+9#^ymt0g(gcgt+a4gi*ra%r_5gqp2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cd-dsi.onrender.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['cd-dsi.onrender.com', 'localhost', '127.0.0.1']
 
 
 
@@ -89,14 +89,12 @@ WSGI_APPLICATION = 'clinicadental.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'clinica_dental',
-        'USER': 'root',
-        'PASSWORD': '1234',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
 
 
 # Password validation
@@ -134,8 +132,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
